@@ -1,3 +1,6 @@
+using System.Text.Json;
+
+using Amazon.Lambda.CloudWatchEvents;
 using Amazon.Lambda.Core;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -7,15 +10,10 @@ namespace Schedule.Lambda;
 
 public class Function
 {
-    
-    /// <summary>
-    /// A simple function that takes a string and does a ToUpper
-    /// </summary>
-    /// <param name="input">The event for the Lambda function handler to process.</param>
-    /// <param name="context">The ILambdaContext that provides methods for logging and describing the Lambda environment.</param>
-    /// <returns></returns>
-    public string FunctionHandler(string input, ILambdaContext context)
+    public void FunctionHandler(CloudWatchEvent<dynamic> input, ILambdaContext context)
     {
-        return input.ToUpper();
+        // All log statements are written to CloudWatch by default. For more information, see
+        // https://docs.aws.amazon.com/lambda/latest/dg/csharp-logging.html
+        context.Logger.LogLine(JsonSerializer.Serialize(input));
     }
 }
